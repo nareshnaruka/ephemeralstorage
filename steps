@@ -1,0 +1,6 @@
+METAURL="http://169.254.169.254/2012-01-12/meta-data/block-device-mapping/"
+for bd in `curl -s $METAURL| grep ephemeral`; do curl -s $METAURL$bd | \
+perl -pe 'BEGIN { $d = shift } s/^(\/dev\/)?(sd)?(.*)$/\/dev\/xvd$3  \/opt\/$d\n/' $bd; 
+done > listofbd
+mount `cat listofbd `
+rm listofbd
